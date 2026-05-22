@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Архитектурная спецификация NuBody</title>
+    <title>Архитектурная спецификация NuBody | SS14 Upstream Docs</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -14,224 +14,318 @@
 
     <style>
         body {
-            font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
-            background-color: #171717;
-            color: #cbd5e1;
+            font-family: "Inter", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+            background-color: #121212;
+            color: #d1d5db;
         }
         code, pre {
-            font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+            font-family: "JetBrains Mono", Consolas, "Liberation Mono", Menlo, Courier, monospace;
         }
-        h1, h2, h3, h4 {
+        h1, h2, h3, h4, h5 {
             color: #ffffff;
             font-weight: 600;
         }
         h2 {
-            border-bottom: 1px solid #3c3c3c;
-            padding-bottom: 0.25em;
-            margin-top: 36px;
-            margin-bottom: 16px;
+            border-bottom: 1px solid #333333;
+            padding-bottom: 0.3em;
+            margin-top: 48px;
+            margin-bottom: 20px;
+            font-size: 1.75rem;
+            letter-spacing: -0.025em;
         }
         h3 {
-            margin-top: 24px;
+            margin-top: 36px;
+            margin-bottom: 16px;
+            font-size: 1.35rem;
+            color: #f3f4f6;
+        }
+        h4 {
+            margin-top: 28px;
             margin-bottom: 12px;
-            color: #f5f5f5;
+            font-size: 1.15rem;
+            color: #e5e7eb;
         }
-        .learn-alert {
-            background-color: #202020;
-            border-left-width: 4px;
-            padding: 1.25rem;
-            margin: 1.5rem 0;
-            font-size: 13px;
-            border-radius: 0 4px 4px 0;
+        p {
+            line-height: 1.75;
+            margin-bottom: 1.25rem;
+            font-size: 0.95rem;
         }
-        .learn-note { border-color: #0078d4; }
-        .learn-warning { border-color: #fcd116; }
-        .learn-danger { border-color: #f14c4c; background-color: #241818; }
         
-        /* Идеальное выравнивание блоков кода, чтобы они не ломали верстку */
+        /* Стандартизированные информационные блоки документации */
+        .doc-alert {
+            background-color: #1a1a1a;
+            border-left-width: 4px;
+            padding: 1.25rem 1.5rem;
+            margin: 2rem 0;
+            font-size: 0.9rem;
+            border-radius: 0 6px 6px 0;
+            line-height: 1.6;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .doc-note { border-color: #3b82f6; } /* Синий */
+        .doc-warning { border-color: #eab308; } /* Желтый */
+        .doc-danger { border-color: #ef4444; background-color: #271717; } /* Красный */
+        
+        /* Стилизация кода и таблиц */
         pre code {
             display: block;
-            padding: 1rem !important;
-            border-radius: 4px;
+            padding: 1.25rem !important;
+            border-radius: 8px;
             border: 1px solid #2d2d2d;
             font-size: 13px !important;
             line-height: 1.6 !important;
+            box-shadow: inset 0 2px 4px 0 rgba(0,0,0,0.2);
+            margin-bottom: 1.5rem;
         }
+        .doc-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+            font-size: 0.85rem;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+        .doc-table th, .doc-table td {
+            border: 1px solid #2d2d2d;
+            padding: 0.85rem 1.25rem;
+            text-align: left;
+        }
+        .doc-table th { background-color: #1f2937; color: #f3f4f6; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.75rem;}
+        .doc-table tr:nth-child(even) { background-color: #1a1a1a; }
+        .doc-table tr:nth-child(odd) { background-color: #121212; }
 
-        /* Тонкая настройка системных скроллбаров */
+        /* Кастомизация скроллбара */
         ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-thumb { background: #3e3e3e; border-radius: 2px; }
-        ::-webkit-scrollbar-track { background: #171717; }
+        ::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #6b7280; }
+        ::-webkit-scrollbar-track { background: #121212; }
         
         .doc-section { scroll-margin-top: 5rem; }
     </style>
 </head>
 <body class="antialiased min-h-screen flex flex-col">
 
-    <header class="w-full h-14 bg-[#202020] border-b border-[#2d2d2d] px-6 flex items-center justify-between text-sm fixed top-0 left-0 z-50">
+    <header class="w-full h-14 bg-[#18181b] border-b border-[#2d2d2d] px-6 flex items-center justify-between text-sm fixed top-0 left-0 z-50 shadow-md">
         <div class="flex items-center gap-4">
-            <span class="text-white font-semibold tracking-wider font-mono">Learn</span>
-            <div class="hidden lg:flex items-center gap-2 text-[#a6a6a6] border-l border-[#3c3c3c] pl-4 text-xs font-mono">
-                <span>Документация</span>
-                <span>/</span>
-                <span>Архитектура RobustToolbox</span>
+            <div class="bg-indigo-600 p-1.5 rounded flex items-center justify-center">
+                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+            </div>
+            <span class="text-white font-bold tracking-wide uppercase text-xs">SS14 Engineering Docs</span>
+            <div class="hidden lg:flex items-center gap-2 text-[#9ca3af] border-l border-[#333] pl-4 text-[11px] font-mono">
+                <span>RobustToolbox Architecture</span>
                 <span>/</span>
                 <span class="text-white">NuBody Specification</span>
             </div>
         </div>
-        <div class="text-xs font-mono text-[#a6a6a6] bg-[#171717] px-3 py-1 rounded border border-[#2d2d2d]">
-            Upstream PR Reference: <span class="text-[#479ef5]">#42476</span> &amp; <span class="text-[#479ef5]">#42715</span>
+        <div class="text-[11px] font-mono text-[#9ca3af] bg-[#27272a] px-3 py-1.5 rounded border border-[#3f3f46]">
+            Pull Requests: <span class="text-[#60a5fa] font-bold">#42476</span> &amp; <span class="text-[#60a5fa] font-bold">#42715</span>
         </div>
     </header>
 
     <div class="flex flex-1 w-full pt-14 relative">
         
-        <aside class="w-72 bg-[#171717] border-r border-[#2d2d2d] p-6 fixed left-0 top-14 bottom-0 hidden lg:block overflow-y-auto z-40">
-            <div class="text-[11px] font-bold text-[#a6a6a6] uppercase tracking-wider mb-4 font-mono">Разделы спецификации</div>
-            <nav class="space-y-4 text-sm text-[#cccccc]">
+        <aside class="w-72 bg-[#18181b] border-r border-[#2d2d2d] p-6 fixed left-0 top-14 bottom-0 hidden lg:block overflow-y-auto z-40">
+            <div class="text-[10px] font-bold text-[#9ca3af] uppercase tracking-wider mb-5 font-mono">Оглавление справочника</div>
+            <nav class="space-y-5 text-sm text-[#d1d5db]">
                 <div>
-                    <span class="text-white font-semibold block mb-1">1. Концепт и БД</span>
-                    <ul class="pl-3 space-y-2 text-xs border-l border-[#2d2d2d] mt-1 font-mono">
-                        <li><a href="#overview" class="hover:text-[#0078d4] block py-0.5">ECS-Децентрализация</a></li>
-                        <li><a href="#db-migrations" class="hover:text-[#0078d4] block py-0.5">Структура хранения JSONB</a></li>
+                    <span class="text-white font-semibold block mb-2 text-[13px]">1. Обзор архитектуры</span>
+                    <ul class="pl-3 space-y-2 text-[12px] border-l border-[#333] mt-1 font-mono">
+                        <li><a href="#overview" class="hover:text-[#60a5fa] block py-0.5 transition-colors">Сущность рефакторинга</a></li>
+                        <li><a href="#db-migrations" class="hover:text-[#60a5fa] block py-0.5 transition-colors">Изменения схемы БД</a></li>
                     </ul>
                 </div>
                 <div>
-                    <span class="text-rose-400 font-semibold flex items-center gap-1 block mb-1">
-                        <span>2. Критические изменения</span>
+                    <span class="text-rose-400 font-semibold flex items-center gap-1 block mb-2 text-[13px]">
+                        2. Критические изменения
                     </span>
-                    <ul class="pl-3 space-y-2 text-xs border-l border-rose-900 mt-1 font-mono">
-                        <li><a href="#breaking-changes" class="text-rose-400 hover:underline block py-0.5 font-bold">Breaking Changes ⚠️</a></li>
+                    <ul class="pl-3 space-y-2 text-[12px] border-l border-rose-900/50 mt-1 font-mono">
+                        <li><a href="#breaking-changes" class="text-rose-400 hover:text-rose-300 block py-0.5 font-bold transition-colors">Breaking Changes ⚠️</a></li>
                     </ul>
                 </div>
                 <div>
-                    <span class="text-white font-semibold block mb-1">3. Компоненты (Shared)</span>
-                    <ul class="pl-3 space-y-2 text-xs border-l border-[#2d2d2d] mt-1 font-mono">
-                        <li><a href="#initialbody" class="hover:text-[#0078d4] block py-0.5">InitialBodyComponent</a></li>
-                        <li><a href="#visualorgan" class="hover:text-[#0078d4] block py-0.5">VisualOrganComponent</a></li>
-                        <li><a href="#visualorganmarkings" class="hover:text-[#0078d4] block py-0.5">VisualOrganMarkings</a></li>
+                    <span class="text-white font-semibold block mb-2 text-[13px]">3. Компоненты (Shared)</span>
+                    <ul class="pl-3 space-y-2 text-[12px] border-l border-[#333] mt-1 font-mono">
+                        <li><a href="#initialbody" class="hover:text-[#60a5fa] block py-0.5 transition-colors">InitialBodyComponent</a></li>
+                        <li><a href="#visualorgan" class="hover:text-[#60a5fa] block py-0.5 transition-colors">VisualOrganComponent</a></li>
+                        <li><a href="#visualorganmarkings" class="hover:text-[#60a5fa] block py-0.5 transition-colors">VisualOrganMarkings</a></li>
+                        <li><a href="#humanoidprofile" class="hover:text-[#60a5fa] block py-0.5 transition-colors">HumanoidProfileComponent</a></li>
                     </ul>
                 </div>
                 <div>
-                    <span class="text-white font-semibold block mb-1">4. Системы (Client)</span>
-                    <ul class="pl-3 space-y-2 text-xs border-l border-[#2d2d2d] mt-1 font-mono">
-                        <li><a href="#visualbodysystem" class="hover:text-[#0078d4] block py-0.5">VisualBodySystem.cs</a></li>
-                        <li><a href="#hideablesystem" class="hover:text-[#0078d4] block py-0.5">HideableLayersSystem.cs</a></li>
+                    <span class="text-white font-semibold block mb-2 text-[13px]">4. Системы (Client)</span>
+                    <ul class="pl-3 space-y-2 text-[12px] border-l border-[#333] mt-1 font-mono">
+                        <li><a href="#visualbodysystem" class="hover:text-[#60a5fa] block py-0.5 transition-colors">VisualBodySystem.cs</a></li>
+                        <li><a href="#hideablesystem" class="hover:text-[#60a5fa] block py-0.5 transition-colors">HideableLayersSystem.cs</a></li>
                     </ul>
                 </div>
                 <div>
-                    <span class="text-white font-semibold block mb-1">5. Архитектура MVVM &amp; UI</span>
-                    <ul class="pl-3 space-y-2 text-xs border-l border-[#2d2d2d] mt-1 font-mono">
-                        <li><a href="#viewmodel" class="hover:text-[#0078d4] block py-0.5">MarkingsViewModel.cs</a></li>
-                        <li><a href="#dragdrop" class="hover:text-[#0078d4] block py-0.5">Математика Drag &amp; Drop</a></li>
+                    <span class="text-white font-semibold block mb-2 text-[13px]">5. Архитектура UI (MVVM)</span>
+                    <ul class="pl-3 space-y-2 text-[12px] border-l border-[#333] mt-1 font-mono">
+                        <li><a href="#viewmodel" class="hover:text-[#60a5fa] block py-0.5 transition-colors">MarkingsViewModel.cs</a></li>
+                        <li><a href="#dragdrop" class="hover:text-[#60a5fa] block py-0.5 transition-colors">Математика Drag &amp; Drop</a></li>
                     </ul>
                 </div>
                 <div>
-                    <span class="text-white font-semibold block mb-1">6. Интеграционные тесты</span>
-                    <ul class="pl-3 space-y-2 text-xs border-l border-[#2d2d2d] mt-1 font-mono">
-                        <li><a href="#tests" class="hover:text-[#0078d4] block py-0.5">MarkingManagerTests.cs</a></li>
+                    <span class="text-white font-semibold block mb-2 text-[13px]">6. Тесты и Интеграция</span>
+                    <ul class="pl-3 space-y-2 text-[12px] border-l border-[#333] mt-1 font-mono">
+                        <li><a href="#tests" class="hover:text-[#60a5fa] block py-0.5 transition-colors">Интеграционные тесты</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <span class="text-indigo-300 font-semibold block mb-2 text-[13px]">7. Миграция YAML</span>
+                    <ul class="pl-3 space-y-2 text-[12px] border-l border-indigo-900/50 mt-1 font-mono">
+                        <li><a href="#yaml-deleted" class="text-indigo-200 hover:text-indigo-100 block py-0.5 transition-colors">Сводка удаленных полей</a></li>
+                        <li><a href="#yaml-organ-ids" class="text-indigo-200 hover:text-indigo-100 block py-0.5 transition-colors">Реестр OrganCategory IDs</a></li>
+                        <li><a href="#yaml-comparison" class="text-emerald-400 font-bold block py-0.5 transition-colors">Старый vs Новый прототип</a></li>
+                        <li><a href="#yaml-groups" class="text-indigo-200 hover:text-indigo-100 block py-0.5 transition-colors">Иерархия markingsGroup</a></li>
                     </ul>
                 </div>
             </nav>
         </aside>
 
-        <main class="flex-1 min-w-0 lg:ml-72 xl:mr-72 p-6 lg:p-12 overflow-x-hidden">
-            
-            <div class="text-xs text-[#a6a6a6] font-mono mb-4 flex items-center gap-2">
-                <span>Документация</span> &gt; <span>Спецификации Robust Engine</span> &gt; <span class="text-white">NuBody</span>
-            </div>
+        <main class="flex-1 min-w-0 lg:ml-72 xl:mr-72 p-6 lg:p-12 xl:p-16 overflow-x-hidden">
 
-            <h1 class="text-3xl font-semibold mb-4 text-white tracking-tight border-b border-[#2d2d2d] pb-4">Архитектурный справочник NuBody: Низкоуровневый рефакторинг систем внешности, разметки слоев и внутренних органов персонажей</h1>
+            <h1 class="text-4xl font-bold mb-6 text-white tracking-tight border-b border-[#2d2d2d] pb-6">Архитектурный справочник NuBody: Глубокий рефакторинг систем внешности и анатомии</h1>
 
-            <section id="overview" class="doc-section mb-12">
-                <h2>1. Глобальный архитектурный концепт</h2>
-                <p class="mb-4 text-[#cbd5e1]">
-                    В рамках пул-реквестов <strong>#42476</strong> и <strong>#42715</strong> была полностью ликвидирована старая система анатомических слотов. До рефакторинга структура тел гуманоидов описывалась иерархическим графом соединений слотов внутри легаси-прототипа <code class="text-rose-400 font-mono">type: body</code>. Вся визуальная составляющая жестко зашивалась в расы (<code class="text-white font-mono">type: species</code>), дублируя ресурсы в <code class="text-rose-400 font-mono">type: speciesBaseSprites</code>, а за наложение отвечала монолитная система внешности. Это исключало возможность физической изоляции органов или конечностей при хирургическом вмешательстве и усложняло поддержку форков.
+            <section id="overview" class="doc-section mb-16">
+                <h2>1. Глобальный архитектурный концепт и проблематика</h2>
+                <p>
+                    В рамках масштабных пулл-реквестов была проведена полная ликвидация легаси-системы анатомических слотов (OldBody). 
+                    До рефакторинга строение тел существ в движке описывалось через жесткий иерархический граф соединений слотов внутри легаси-прототипа <code>type: body</code>. Вся визуальная составляющая моба (текстуры, цвета, метки) была намертво привязана к монолитному компоненту внешности (<code>HumanoidAppearanceComponent</code>), а визуальные ресурсы рас жестко дублировались в прототипах <code>type: speciesBaseSprites</code>.
                 </p>
-                <p class="mb-4 text-[#cbd5e1]">
-                    Спецификация <strong>NuBody</strong> переводит физическое строение существа на рельсы полностью децентрализованного ECS-подхода. Тело теперь представляет собой плоский рантайм-набор самостоятельных ECS-сущностей органов и конечностей, находящихся внутри контейнеров. Каждый орган содержит собственный визуальный компонент разметки слоев, а кастомизируемые маркировки (волосы, узоры, татуировки) теперь привязаны непосредственно к <strong>конкретной категории анатомического органа (Organ Category Prototype ID)</strong>.
+                <p>
+                    Такой подход имел ряд архитектурных изъянов: он делал невозможной корректную визуальную изоляцию конечностей при хирургическом вмешательстве или расчленении (оторванная рука теряла свой спрайт, цвет кожи и татуировки), усложнял поддержку форков из-за огромного количества дублирующегося YAML-кода и не позволял привязывать визуальные метки к конкретным частям тела (например, шрам только на левой руке).
                 </p>
+                <p>
+                    Новая спецификация <strong>NuBody</strong> переводит физическое строение существа на рельсы полностью децентрализованного компонентного (ECS) подхода. Тело теперь представляет собой <strong>плоский рантайм-набор самостоятельных сущностей органов и конечностей</strong>, помещенных в слоты-контейнеры материнской сущности. 
+                    Каждый отдельный орган содержит собственный визуальный компонент разметки слоев (<code>VisualOrganComponent</code>), а все кастомизируемые маркировки (волосы, узоры, шерсть, татуировки) теперь привязаны непосредственно к <strong>конкретной категории анатомического органа (Organ Category Prototype ID)</strong>.
+                </p>
+
+                <div id="db-migrations" class="doc-alert doc-note">
+                    <span class="font-semibold text-white block mb-2 text-[15px]">⚙️ Спецификация изменений на уровне персистенции (База данных EF Core)</span>
+                    <p class="mb-2">
+                        Рефакторинг затронул структуру хранения профилей персонажей в БД. Миграции баз данных (например, скрипт <code>20260118084629_OrganMarkings.cs</code> для PostgreSQL) добавляют в таблицу профилей <code>profile</code> новую колонку <code>organ_markings</code> с типом данных <code>jsonb</code>.
+                    </p>
+                    <p class="mb-0">
+                        Из структуры десериализации базовых профилей (таких как <code>CharlieCharlieson</code>) <strong>полностью удалены</strong> устаревшие выделенные примитивные строковые поля цвета и стиля волос, а также цвета и стиля растительности на лице. Теперь волосы и борода не являются какими-то особыми параметрами гуманоида — они сериализуются внутри общего JSON-словаря как стандартные маркировки, накладываемые на зону головы (орган <code>Head</code>). Все существующие учетные записи игроков автоматически конвертируются при первом входе.
+                    </p>
+                </div>
             </section>
 
-            <section id="breaking-changes" class="doc-section mb-12 border-t border-[#2d2d2d] pt-8">
-                <h2 class="text-2xl text-rose-400 border-b border-rose-900 pb-1 mb-4">2. Критические изменения для разработчиков (Breaking Changes)</h2>
+            <section id="breaking-changes" class="doc-section mb-16">
+                <h2 class="text-rose-400 border-[#4c1d95]/30">2. Критические изменения для разработчиков форков (Breaking Changes)</h2>
+                <p class="mb-6">
+                    Данный раздел содержит полный перечень инфраструктурных изменений, которые ломают обратную совместимость. Если вы поддерживаете собственный сервер, форк или кастомные расы, эти изменения необходимо учесть при слиянии (merge) апстрима в ваш репозиторий.
+                </p>
+
+                <div class="doc-alert doc-danger space-y-5">
+                    <div>
+                        <strong class="text-white block mb-1.5 text-[14px]">⚠️ Удаление легаси-классов систем и компонентов</strong>
+                        <p class="text-slate-300 text-[13.5px] m-0">
+                            Класс <code>HumanoidAppearanceSystem</code> и связанный с ним компонент <code>HumanoidAppearanceComponent</code> полностью удалены из кодовой базы сервера и клиента. Любые вызовы к ним в ваших кастомных системах (медицинские сканеры, импланты, аномалии, системы маскировки шпионов, мутации) вызовут ошибку компиляции. Все ссылки на статические данные профиля должны быть переведены на <code>HumanoidProfileComponent</code>, а управление визуальными слоями — на <code>SharedVisualBodySystem</code>.
+                        </p>
+                    </div>
+                    <div>
+                        <strong class="text-white block mb-1.5 text-[14px]">⚠️ Краш сервера на этапе инициализации YAML парсера</strong>
+                        <p class="text-slate-300 text-[13.5px] m-0">
+                            Следующие типы прототипов были полностью вырезаны из парсера движка RobustToolbox: <code>type: speciesBaseSprites</code>, <code>type: humanoidBaseSprite</code> и <code>type: markingPoints</code>. Если в ваших кастомных конфигурационных YAML-файлах остался хоть один из этих типов (или ссылки на них в параметрах рас), сервер аварийно завершит работу с критической ошибкой <code>YAML load fail</code> до запуска ECS.
+                        </p>
+                    </div>
+                    <div>
+                        <strong class="text-white block mb-1.5 text-[14px]">⚠️ Удаление синтаксиса Magic Mirror и легаси-пикеров</strong>
+                        <p class="text-slate-300 text-[13.5px] m-0">
+                            Старый монолитный XAML-виджет <code>SingleMarkingPicker</code> и логика обработки одиночных сетевых сообщений (например, <code>MagicMirrorAddSlotMessage</code>) полностью ликвидированы. Настройка внешности через парикмахерские зеркала, меню создания персонажа и админ-панели теперь использует унифицированную поорганную модель представления <code>MarkingsViewModel</code>.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="initialbody" class="doc-section mb-16">
+                <h2>3. Спецификация компонентов данных (Content.Shared)</h2>
+                <p class="mb-8">
+                    Компонентная модель NuBody абстрагирует описание физического строения и правила отрисовки слоев в изолированные структуры данных.
+                </p>
+
+                <h4>InitialBodyComponent</h4>
                 <p class="mb-4">
-                    Данный раздел содержит полный перечень инфраструктурных изменений, которые кардинально влияют на совместимость кодовых баз локальных форков и сторонних репозиториев с новым апстрим-ядром.
+                    Обеспечивает декларативное наполнение родительской сущности дочерними органами в момент ее первичной инициализации через <code>InitialBodySystem</code>. Это избавляет разработчиков от необходимости писать жесткий императивный спавн сущностей через C#-код.
                 </p>
+                <table class="doc-table">
+                    <thead><tr><th>Свойство (C#)</th><th>Тип данных</th><th>YAML тег</th><th>Описание</th></tr></thead>
+                    <tbody>
+                        <tr>
+                            <td class="font-bold text-[#60a5fa] font-mono">Organs</td>
+                            <td class="text-[#f472b6] font-mono">Dictionary&lt;ProtoId&lt;OrganCategoryPrototype&gt;, EntProtoId&gt;</td>
+                            <td class="text-[#fbbf24] font-mono">organs</td>
+                            <td>Плоский ассоциативный массив, сопоставляющий уникальную категорию анатомической зоны (ключ) с конкретным ID прототипа сущности органа для спавна (значение).</td>
+                        </tr>
+                    </tbody>
+                </table>
 
-                <div class="learn-alert learn-danger text-xs leading-relaxed space-y-3">
-                    <div>
-                        <strong class="text-white block mb-0.5">⚠️ ПОЛНОЕ УДАЛЕНИЕ ЛЕГАСИ-КЛАССОВ И КОМПОНЕНТОВ СЕРВЕРА</strong>
-                        Класс <code class="text-rose-300 font-mono">HumanoidAppearanceSystem</code> и связанный с ним компонент <code class="text-rose-300 font-mono">HumanoidAppearanceComponent</code> полностью удалены из исходного кода. Любые вызовы в сторонних системах (медицинские сканеры, импланты, аномалии, системы маскировки) упадут при компиляции. Все ссылки на данные профиля должны быть переведены на <code class="text-emerald-400 font-mono">HumanoidProfileComponent</code>, а визуальное управление — на <code class="text-emerald-400 font-mono">SharedVisualBodySystem</code>.
-                    </div>
-                    <div>
-                        <strong class="text-white block mb-0.5">⚠️ ИЗМЕНЕНИЕ СХЕМЫ БАЗЫ ДАННЫХ И СЕРИАЛИЗАЦИИ ПРОФИЛЕЙ</strong>
-                        Миграция базы данных <code class="text-white font-mono">20260118084629_OrganMarkings.cs</code> (для Postgres) добавляет в таблицу <code class="text-white font-mono">profile</code> новую колонку <code class="text-amber-400 font-mono">organ_markings</code> с типом данных <code class="text-white font-mono">jsonb</code>. Из структуры десериализации профилей полностью удалены выделенные примитивные строковые поля цвета и стиля волос/бороды. Теперь волосы — это стандартные маркировки, накладываемые на зону головы (<code class="text-white font-mono">Head</code>). Старые учетные записи игроков автоматически конвертируются при первом входе.
-                    </div>
-                    <div>
-                        <strong class="text-white block mb-0.5">⚠️ КРАШ СЕРВЕРА НА ЭТАПЕ ИНИЦИАЛИЗАЦИИ РЕСУРСОВ YAML</strong>
-                        Следующие типы прототипов были полностью вырезаны из парсера движка: <code class="text-rose-300 font-mono">type: speciesBaseSprites</code>, <code class="text-rose-300 font-mono">type: humanoidBaseSprite</code>, <code class="text-rose-300 font-mono">type: markingPoints</code>. Если в ваших кастомных файлах остался хоть один из этих типов, сервер упадет с ошибкой.
-                    </div>
-                    <div>
-                        <strong class="text-white block mb-0.5">⚠️ УДАЛЕНИЕ СИНТАКСИСА MAGIC MIRROR И ПИKЕРОВ</strong>
-                        Старый UI-виджет <code class="text-rose-300 font-mono">SingleMarkingPicker</code> и логика обработки одиночных сетевых сообщений вроде <code class="text-rose-300 font-mono">MagicMirrorAddSlotMessage</code> полностью ликвидированы. Настройка внешности зеркал теперь использует унифицированную поорганную модель представления <code class="text-emerald-400 font-mono">MarkingsViewModel</code>. При обновлении форков легаси-окна кастомизации полностью перестанут функционировать.
-                    </div>
-                </div>
+                <h4 id="visualorgan">VisualOrganComponent</h4>
+                <p class="mb-4">
+                    Данный компонент вешается непосредственно на сущность органа или конечности. Он служит дескриптором для клиентского <code>VisualBodySystem</code>, указывая, в какой именно графический слой родительского тела необходимо проецировать базовый спрайт данной части тела.
+                </p>
+                <table class="doc-table">
+                    <thead><tr><th>Свойство (C#)</th><th>Тип данных</th><th>YAML тег</th><th>Описание</th></tr></thead>
+                    <tbody>
+                        <tr>
+                            <td class="font-bold text-[#60a5fa] font-mono">Layer</td>
+                            <td class="text-[#f472b6] font-mono">string</td>
+                            <td class="text-[#fbbf24] font-mono">layer</td>
+                            <td>Идентификатор целевого рендеринг-слоя на холсте тела (например, базовый текстурный слой кожи).</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold text-[#60a5fa] font-mono">Data</td>
+                            <td class="text-[#f472b6] font-mono">Dictionary&lt;string, string&gt;</td>
+                            <td class="text-[#fbbf24] font-mono">data</td>
+                            <td>Дополнительный словарь метаданных для передачи специфических параметров (цветовых масок, стейтов) в шейдеры.</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4 id="visualorganmarkings">VisualOrganMarkingsComponent</h4>
+                <p class="mb-4">
+                    Указывает рантайм-системам, что данный орган поддерживает динамическое нанесение кастомизируемых пользователем маркировок (шерсть, татуировки, шрамы). Компонент накапливает и синхронизирует сетевое состояние примененных меток между сервером и клиентами.
+                </p>
+                <table class="doc-table">
+                    <thead><tr><th>Свойство (C#)</th><th>Тип данных</th><th>Сетевая репликация</th><th>Описание</th></tr></thead>
+                    <tbody>
+                        <tr>
+                            <td class="font-bold text-[#60a5fa] font-mono">MarkingData</td>
+                            <td class="text-[#f472b6] font-mono">OrganMarkingData</td>
+                            <td class="text-slate-400 italic">Static Blueprint</td>
+                            <td>Конфигурационная структура, хранящая ссылку на правила группы <code>markingsGroup</code> и перечень допустимых подслоев.</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold text-[#60a5fa] font-mono">Markings</td>
+                            <td class="text-[#f472b6] font-mono">Dictionary&lt;HumanoidVisualLayers, List&lt;Marking&gt;&gt;</td>
+                            <td class="text-emerald-400 font-mono font-bold">[AutoNetworked]</td>
+                            <td>Рантайм-список фактически нанесенных на текущий момент маркировок, реплицируемый сервером всем клиентам в зоне видимости.</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4 id="humanoidprofile">HumanoidProfileComponent (ex. HumanoidAppearanceComponent)</h4>
+                <p>
+                    Является абсолютной архитектурной заменой старого монолитного компонента внешности. Однако теперь его зона ответственности строго ограничена хранением метаданных профиля существа (раса, пол, возраст, базовая палитра кожи и глаз). 
+                    Из структуры компонента <strong>полностью вырезаны</strong> поля <code>species</code> (список базовых спрайтов расы) и <code>hideLayersOnEquip</code>. Управление лимитами маркировок и динамическим сокрытием слоев одежды полностью делегировано обособленным ECS-системам движка.
+                </p>
             </section>
 
-            <section id="initialbody" class="doc-section mb-12 border-t border-[#2d2d2d] pt-8">
-                <h2>3. Спецификация общих компонентов данных (Content.Shared)</h2>
-                <p class="mb-6">Компонентная модель NuBody абстрагирует описание физического строения и правила отрисовки слоев.</p>
-
-                <h3>InitialBodyComponent</h3>
-                <p class="mb-2 text-xs text-slate-400">Обеспечивает декларативное наполнение сущности органами в момент первичной инициализации:</p>
-                <div class="bg-[#1e1e1e] border border-[#2d2d2d] rounded overflow-hidden mb-6 text-xs font-mono">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="bg-[#2d2d2d] text-white border-b border-[#3c3c3c]"><th class="p-2.5">Свойство (C#)</th><th class="p-2.5">Тип данных C#</th><th class="p-2.5">YAML тег</th></tr>
-                        </thead>
-                        <tbody class="divide-y divide-[#2d2d2d] text-slate-300">
-                            <tr><td class="p-2.5 font-bold text-white">Organs</td><td class="p-2.5 text-[#479ef5]">Dictionary&lt;ProtoId&lt;OrganCategoryPrototype&gt;, EntProtoId&gt;</td><td class="p-2.5 text-[#f59e0b]">organs</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <h3 id="visualorgan">VisualOrganComponent</h3>
-                <p class="mb-2 text-xs text-slate-400">Вешается на сущность органа/конечности, указывая рендереру целевую зону проецирования:</p>
-                <div class="bg-[#1e1e1e] border border-[#2d2d2d] rounded overflow-hidden mb-6 text-xs font-mono">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="bg-[#2d2d2d] text-white border-b border-[#3c3c3c]"><th class="p-2.5">Свойство (C#)</th><th class="p-2.5">Тип данных C#</th><th class="p-2.5">YAML тег</th></tr>
-                        </thead>
-                        <tbody class="divide-y divide-[#2d2d2d] text-slate-300">
-                            <tr><td class="p-2.5 font-bold text-white">Layer</td><td class="p-2.5 text-[#ec4899]">string</td><td class="p-2.5 text-[#f59e0b]">layer</td></tr>
-                            <tr><td class="p-2.5 font-bold text-white">Data</td><td class="p-2.5 text-[#479ef5]">Dictionary&lt;string, string&gt;</td><td class="p-2.5 text-[#f59e0b]">data</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <h3 id="visualorganmarkings">VisualOrganMarkingsComponent</h3>
-                <p class="mb-2 text-xs text-slate-400">Сетевой рантайм-контейнер для хранения кастомных узоров, татуировок или шерсти:</p>
-                <div class="bg-[#1e1e1e] border border-[#2d2d2d] rounded overflow-hidden mb-6 text-xs font-mono">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="bg-[#2d2d2d] text-white border-b border-[#3c3c3c]"><th class="p-2.5">Свойство (C#)</th><th class="p-2.5">Тип данных C#</th><th class="p-2.5">Репликация</th></tr>
-                        </thead>
-                        <tbody class="divide-y divide-[#2d2d2d] text-slate-300">
-                            <tr><td class="p-2.5 font-bold text-white">MarkingData</td><td class="p-2.5 text-[#ec4899]">OrganMarkingData</td><td class="p-2.5 text-slate-500">Static Blueprint</td></tr>
-                            <tr><td class="p-2.5 font-bold text-white">Markings</td><td class="p-2.5 text-[#479ef5]">Dictionary&lt;HumanoidVisualLayers, List&lt;Marking&gt;&gt;</td><td class="p-2.5 text-amber-500">[AutoNetworked]</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-
-            <section id="visualbodysystem" class="doc-section mb-12 border-t border-[#2d2d2d] pt-8">
+            <section id="visualbodysystem" class="doc-section mb-16">
                 <h2>4. Реализация клиентских систем рендеринга слоев (Content.Client)</h2>
-                <p class="mb-4 text-[#cbd5e1]">
-                    Класс <code class="text-white font-mono">VisualBodySystem</code> выступает главным контроллером послойной сборки RSI-состояний на холсте родительской сущности моба. Ниже приведена точная структура регистрации событий из диффа изменений:
+                <p class="mb-6">
+                    Клиентские системы отвечают за финальный композитинг спрайтов на экране игрока, динамически реагируя на изменения состояния компонентов.
                 </p>
 
-                <pre><code class="language-csharp">namespace Content.Client.Body;
+                <h4>VisualBodySystem.cs</h4>
+                <p class="mb-4">
+                    Класс <code>VisualBodySystem</code> наследует базовую логику от <code>SharedVisualBodySystem</code> и управляет послойной сборкой RSI-состояний на холсте <code>SpriteComponent</code> родительской сущности. При инициализации система регистрирует разветвленную сеть обработчиков событий для отслеживания хирургических вмешательств, ампутаций и изменений профиля:
+                </p>
+
+<pre><code class="language-csharp">namespace Content.Client.Body;
 
 public sealed class VisualBodySystem : SharedVisualBodySystem
 {
@@ -244,35 +338,66 @@ public sealed class VisualBodySystem : SharedVisualBodySystem
     {
         base.Initialize();
 
+        // Подписки на физическое внедрение/извлечение (ампутацию) органов
         SubscribeLocalEvent&lt;VisualOrganComponent, OrganGotInsertedEvent&gt;(OnOrganGotInserted);
         SubscribeLocalEvent&lt;VisualOrganComponent, OrganGotRemovedEvent&gt;(OnOrganGotRemoved);
         SubscribeLocalEvent&lt;VisualOrganComponent, AfterAutoHandleStateEvent&gt;(OnOrganState);
 
+        // Подписки на изменение состава кастомизируемых маркировок на конкретном органе
         SubscribeLocalEvent&lt;VisualOrganMarkingsComponent, OrganGotInsertedEvent&gt;(OnMarkingsGotInserted);
         SubscribeLocalEvent&lt;VisualOrganMarkingsComponent, OrganGotRemovedEvent&gt;(OnMarkingsGotRemoved);
         SubscribeLocalEvent&lt;VisualOrganMarkingsComponent, AfterAutoHandleStateEvent&gt;(OnMarkingsState);
 
+        // Трансляция события изменения видимости слоев из-за надетой одежды
         SubscribeLocalEvent&lt;VisualOrganMarkingsComponent, BodyRelayedEvent&lt;HumanoidLayerVisibilityChangedEvent&gt;&gt;(OnMarkingsChangedVisibility);
 
+        // Регистрация колбеков на изменение клиентских и серверных настроек цензуры наготы
         Subs.CVar(_cfg, CCVars.AccessibilityClientCensorNudity, OnCensorshipChanged, true);
         Subs.CVar(_cfg, CCVars.AccessibilityServerCensorNudity, OnCensorshipChanged, true);
     }
 }</code></pre>
 
-                <h3 class="text-xl mt-6">Подсистема цензуры наготы и наложение дефолтных слоев белья</h3>
-                <p class="mb-3 text-[#cbd5e1]">
-                    При изменении CVars цензуры наготы, метод <code class="text-white font-mono">OnCensorshipChanged</code> полностью перестраивает слои спрайтов. Генератор динамически подставляет дефолтные элементы нижнего белья из конфигурации <code class="text-white font-mono">NudityDefault</code> группы, если игрок не выбрал кастомный вариант кастомизации персонажа:
+                <h5 class="mt-8">Алгоритм генерации уникальных ключей слоев</h5>
+                <p class="mb-4">
+                    Генерация и наложение графических слоев меток поверх базового спрайта органа выполняются строго по защищенному контракту именования (<code>$"{proto.ID}-{rsi.RsiState}"</code>), что исключает коллизии и конфликты перезаписи индексов в рендерере:
                 </p>
-                
-                <pre><code class="language-csharp">private IEnumerable&lt;Marking&gt; AllMarkings(Entity&lt;VisualOrganMarkingsComponent&gt; ent)
+<pre><code class="language-csharp">private void ApplyMarkings(Entity&lt;VisualOrganMarkingsComponent&gt; ent, EntityUid target)
 {
-    foreach (var markings in ent.Comp.Markings.Values)
+    RemoveMarkings(ent, target); // Полная очистка старых зарегистрированных слоев перед ребилдом
+    
+    int index = 0;
+    _sprite.LayerMapTryGet(target, ent.Comp.MarkingData.Layer, out index, true);
+
+    int i = 0;
+    foreach (var (marking, alpha) in AllMarkings(ent))
     {
-        foreach (var marking in markings)
+        if (!_marking.TryGetMarking(marking, out var proto)) continue;
+
+        foreach (var rsi in proto.Sprites)
         {
-            yield return marking;
+            var layerId = $"{proto.ID}-{rsi.RsiState}";
+            if (!_sprite.LayerMapTryGet(target, layerId, out _, false))
+            {
+                var layer = _sprite.AddLayer(target, sprite, index + i + 1);
+                _sprite.LayerMapSet(target, layerId, layer);
+                _sprite.LayerSetSprite(target, layerId, rsi);
+                
+                // Динамическое применение цветовой палитры маркировки, переданной из профиля
+                _sprite.LayerSetColor(target, layerId, marking.MarkingColors[i]);
+            }
+            i++;
         }
     }
+}</code></pre>
+
+                <h5 class="mt-8">Подсистема цензуры наготы и автоматического нижнего белья</h5>
+                <p class="mb-4">
+                    При изменении CVars цензуры наготы (<code>AccessibilityClientCensorNudity</code> / <code>AccessibilityServerCensorNudity</code>), метод <code>OnCensorshipChanged</code> осуществляет полный принудительный сброс и перерисовку спрайтов. 
+                    Внутри итератора <code>AllMarkings</code> зашита логика автоматической подстановки дефолтных слоев скрытия наготы. Если игрок не выбрал кастомное нижнее белье, система обращается к конфигурации <code>NudityDefault</code> группы прототипов расы:
+                </p>
+<pre><code class="language-csharp">private IEnumerable&lt;Marking&gt; AllMarkings(Entity&lt;VisualOrganMarkingsComponent&gt; ent)
+{
+    // ... yield return пользовательских маркировок ...
 
     var censorNudity = _cfg.GetCVar(CCVars.AccessibilityClientCensorNudity) || _cfg.GetCVar(CCVars.AccessibilityServerCensorNudity);
     if (!censorNudity)
@@ -286,8 +411,9 @@ public sealed class VisualBodySystem : SharedVisualBodySystem
 
         var markings = ent.Comp.Markings.GetValueOrDefault(layer) ?? [];
         if (markings.Any(m =&gt; _marking.TryGetMarking(m, out var proto) &amp;&amp; proto.BodyPart == layer))
-            continue; // Слой уже занят кастомной маркировкой, дефолт цензуры пропускается
+            continue; // Пользователь нанес кастомное нижнее белье, дефолт цензуры игнорируется
 
+        // Насильно инжектируем дефолтные спрайты белья, если слой голый
         foreach (var defaultMarkingId in layerLimits.NudityDefault)
         {
             yield return new Marking(defaultMarkingId, 1);
@@ -295,17 +421,17 @@ public sealed class VisualBodySystem : SharedVisualBodySystem
     }
 }</code></pre>
 
-                <h3 id="hideablesystem" class="text-xl mt-8">Управление скрытием слоев одежды (HideableHumanoidLayersSystem)</h3>
-                <p class="mb-3 text-[#cbd5e1]">
-                    Рассчитывает разницу состояний (Diff) между наборами скрытых слоев текущего и предыдущего кадров, минимизируя нагрузку на вызовы рендерера:
+                <h4 id="hideablesystem" class="mt-12">Управление динамическим скрытием слоев одежды (HideableHumanoidLayersSystem.cs)</h4>
+                <p class="mb-4">
+                    Класс обрабатывает компонент <code>HideableHumanoidLayersComponent</code>. Он заменяет старую разрозненную логику скрытия частей тела при надевании скафандров, громоздкой обуви или закрытых шлемов.
+                    Основной метод <code>UpdateSprite</code> работает по принципу отслеживания математической разности состояний (Diff алгоритм) между хэш-сетами <code>HiddenLayers</code> и <code>LastHiddenLayers</code>, минимизируя нагрузку на вызовы рендерера:
                 </p>
-                <pre><code class="language-csharp">private void UpdateSprite(Entity&lt;HideableHumanoidLayersComponent&gt; ent)
+<pre><code class="language-csharp">private void UpdateSprite(Entity&lt;HideableHumanoidLayersComponent&gt; ent)
 {
-    // Возвращаем видимость слоям, которые вышли из зоны скрытия одеждой
+    // 1. Возвращаем видимость слоям, которые вышли из зоны скрытия (игрок снял шлем/куртку)
     foreach (var item in ent.Comp.LastHiddenLayers)
     {
-        if (ent.Comp.HiddenLayers.ContainsKey(item))
-            continue;
+        if (ent.Comp.HiddenLayers.ContainsKey(item)) continue;
 
         var evt = new HumanoidLayerVisibilityChangedEvent(item, true);
         RaiseLocalEvent(ent, ref evt);
@@ -314,11 +440,10 @@ public sealed class VisualBodySystem : SharedVisualBodySystem
             _sprite.LayerSetVisible(ent.Owner, index, true);
     }
 
-    // Скрываем новые изолированные слои
+    // 2. Скрываем слои, которые попали в список скрытия в текущем кадре
     foreach (var item in ent.Comp.HiddenLayers.Keys)
     {
-        if (ent.Comp.LastHiddenLayers.Contains(item))
-            continue;
+        if (ent.Comp.LastHiddenLayers.Contains(item)) continue;
 
         var evt = new HumanoidLayerVisibilityChangedEvent(item, false);
         RaiseLocalEvent(ent, ref evt);
@@ -332,17 +457,23 @@ public sealed class VisualBodySystem : SharedVisualBodySystem
 }</code></pre>
             </section>
 
-            <section id="viewmodel" class="doc-section mb-12 border-t border-[#2d2d2d] pt-8">
+            <section id="viewmodel" class="doc-section mb-16">
                 <h2>5. Архитектура слоя MVVM и Сетка пользовательского интерфейса</h2>
-                <p class="mb-4 text-[#cbd5e1]">
-                    Модель представления <code class="text-white font-mono">MarkingsViewModel</code> изолирует UI-виджеты от кодовой базы систем, проверяя лимиты, ограничения по полу расы и осуществляя интеллектуальное кэширование цветовой палитры в словарь <code class="text-white font-mono">_previousColors</code>:
+                <p class="mb-6">
+                    Для поддержки нового поорганного деления маркировок старое UI-окно кастомизации было полностью переписано с линейного списка на строгую модель <strong>MVVM (Model-View-ViewModel)</strong>.
                 </p>
 
-                <pre><code class="language-csharp">public bool TrySelectMarking(ProtoId&lt;OrganCategoryPrototype&gt; organ, HumanoidVisualLayers layer, ProtoId&lt;MarkingPrototype&gt; markingId)
+                <h4>MarkingsViewModel.cs</h4>
+                <p class="mb-4">
+                    Ядро новой UI-архитектуры. Класс агрегирует данные профиля сущности и транслирует их в виджеты. Изолирует визуальную сетку от прямого вызова систем. Валидирует лимиты расы, ограничения по полу и осуществляет интеллектуальное кэширование цветовой палитры в локальный словарь <code>_previousColors</code> для защиты от случайного сброса настроек игроком при переключении причесок:
+                </p>
+
+<pre><code class="language-csharp">public bool TrySelectMarking(ProtoId&lt;OrganCategoryPrototype&gt; organ, HumanoidVisualLayers layer, ProtoId&lt;MarkingPrototype&gt; markingId)
 {
     if (!_prototype.TryIndex(markingId, out var markingProto) || !_organData.TryGetValue(organ, out var organData) || !_organProfileData.TryGetValue(organ, out var profileData))
         return false;
 
+    // Валидация ограничений группы расы и пола
     if (EnforceGroupAndSexRestrictions &amp;&amp; !_marking.CanBeApplied(organData.Group, profileData.Sex, markingProto))
         return false;
 
@@ -351,6 +482,7 @@ public sealed class VisualBodySystem : SharedVisualBodySystem
     organMarkings[layer] = organMarkings.GetValueOrDefault(layer) ?? [];
     var layerMarkings = organMarkings[layer];
 
+    // Кэширование: восстанавливаем старые цвета, если игрок уже выбирал эту метку ранее в этой сессии
     var colors = _previousColors.GetValueOrDefault(markingId) ??
                  MarkingColoring.GetMarkingLayerColors(markingProto, profileData.SkinColor, profileData.EyeColor, layerMarkings);
     var newMarking = new Marking(markingId, colors);
@@ -362,9 +494,10 @@ public sealed class VisualBodySystem : SharedVisualBodySystem
         return true;
     }
 
+    // Автоматическая замена элемента (например, прически) при жестком лимите слоя равном 1
     if (limits.Limit == 1 &amp;&amp; layerMarkings.Count == 1)
     {
-        layerMarkings.Clear(); // Автозамена прически при лимите слоя = 1
+        layerMarkings.Clear(); 
         layerMarkings.Add(newMarking);
         MarkingsChanged?.Invoke(organ, layer);
         return true;
@@ -379,11 +512,11 @@ public sealed class VisualBodySystem : SharedVisualBodySystem
     return false;
 }</code></pre>
 
-                <h3 id="dragdrop">Математика Drag &amp; Drop позиционирования слоев</h3>
-                <p class="mb-3 text-[#cbd5e1]">
-                    При перетаскивании слоев маркировок внутри интерфейса, маяки drop-зоны <code class="text-white font-mono">LayerDragDropBeacon</code> используют расчёт квадрата расстояния для минимизации нагрузки на CPU за счет исключения избыточного извлечения квадратного корня:
+                <h4 id="dragdrop" class="mt-10">Математика Drag &amp; Drop позиционирования слоев (LayerMarkingOrderer.xaml.cs)</h4>
+                <p class="mb-4">
+                    Для интерактивного изменения порядка отображения слоев (например, перетащить татуировку поверх слоя шерсти) используется глубокая интеграция со вспомогательным классом <code>DragDropHelper&lt;LayerMarkingDragged&gt;</code>. Во время движения курсора мыши система производит расчёт квадрата расстояния до потенциальных маяков drop-зон (<code>LayerDragDropBeacon</code>). Использование квадрата длины вектора <code>LengthSquared()</code> применяется для оптимизации производительности рендера (исключает тяжелую математическую операцию извлечения квадратного корня на каждый кадр):
                 </p>
-                <pre><code class="language-csharp">private bool OnContinueDrag(float frameTime)
+<pre><code class="language-csharp">private bool OnContinueDrag(float frameTime)
 {
     var (item, container) = _dragDropHelper.Dragged;
     LayoutContainer.SetPosition(item, UserInterfaceManager.MousePositionScaled.Position - new Vector2(32, 32));
@@ -394,20 +527,20 @@ public sealed class VisualBodySystem : SharedVisualBodySystem
 
     if (closestBeacon != _dragTarget)
     {
-        _dragTarget?.UnbecomeTarget(); // Сброс старой высоты drop-зоны в float.NaN
+        _dragTarget?.UnbecomeTarget(); // Возврат старого таргета в дефолтное состояние (размер float.NaN)
         _dragTarget = closestBeacon;
-        _dragTarget?.BecomeTarget();   // Раскрытие новой зоны: высота 64px и класс .PanelDropTarget
+        _dragTarget?.BecomeTarget();   // Раскрытие новой зоны сброса: принудительная высота 64px и стиль .PanelDropTarget
     }
     return true;
 }</code></pre>
             </section>
 
-            <section id="tests" class="doc-section mb-12 border-t border-[#2d2d2d] pt-8">
+            <section id="tests" class="doc-section mb-16">
                 <h2>6. Справочник Интеграционных Тестов (MarkingManagerTests.cs)</h2>
-                <p class="mb-4 text-[#cbd5e1]">
-                    Для верификации корректности миграций был разработан комплекс автоматических тестов, проверяющих усечение лимитов и конвертацию легаси-причесок гуманоидов в маркировки органа головы:
+                <p class="mb-4">
+                    Для верификации корректности работы миграций был разработан комплекс автоматических интеграционных тестов в модуле <code>MarkingManagerTests.cs</code>. Наиболее важным является тест <code>HairConversion</code>, проверяющий автоматическую конвертацию легаси-причесок гуманоидов (старый плоский массив) в маркировки органа головы новой архитектуры NuBody:
                 </p>
-                <pre><code class="language-csharp">[Test]
+<pre><code class="language-csharp">[Test]
 public async Task HairConversion()
 {
     await using var pair = await PoolManager.GetServerClient();
@@ -417,13 +550,16 @@ public async Task HairConversion()
     await server.WaitAssertion(() =&gt;
     {
         var markingManager = server.ResolveDependency&lt;MarkingManager&gt;();
+        // Создаем старую легаси-маркировку волос
         var markings = new List&lt;Marking&gt;() { new("HumanHairLongBedhead2", new List&lt;Color&gt;() { Color.Red }) };
 
-        // Проверяем, что легаси-волосы корректно конвертируются в орган Head архитектуры NuBody
+        // Имитируем загрузку старого профиля, проверяя работу конвертера
         var converted = markingManager.ConvertMarkings(markings, "Human");
 
+        // Утверждаем, что волосы теперь принадлежат сущности изолированного органа Head
         Assert.That(converted, Does.ContainKey(new ProtoId&lt;OrganCategoryPrototype&gt;("Head")));
         Assert.That(converted["Head"], Does.ContainKey(HumanoidVisualLayers.Hair));
+        
         var hairMarkings = converted["Head"][HumanoidVisualLayers.Hair];
         Assert.That(hairMarkings, Has.Count.EqualTo(1));
         Assert.That(hairMarkings[0].MarkingId, Is.EqualTo("HumanHairLongBedhead2"));
@@ -432,46 +568,162 @@ public async Task HairConversion()
 }</code></pre>
             </section>
 
-            <section id="yaml-mapping" class="doc-section mb-12 border-t border-[#2d2d2d] pt-8">
-                <h2>7. Спецификация YAML-контрактов и маппинг рас</h2>
-                <p class="mb-2 text-xs text-slate-400">Пример декларативного описания анатомического наполнения сущности моба:</p>
-                <pre><code class="language-yaml">- type: entity
+            <section id="yaml-deleted" class="doc-section mb-16">
+                <h2>7. Энциклопедия миграции YAML-прототипов и маппинг (Контракты)</h2>
+                <p class="mb-6">
+                    Все кастомные YAML-файлы сущностей и рас, написанные под старую архитектуру, должны быть переформатированы. Оставление старых полей приведет к падению парсера.
+                </p>
+
+                <h4>Сводная таблица удалений легаси-полей прототипов</h4>
+                <table class="doc-table mt-4 mb-10">
+                    <thead><tr><th>Компонент / Прототип</th><th class="text-rose-400">Удаленное поле (Сломает билд)</th><th class="text-[#60a5fa]">Новый рабочий аналог (NuBody)</th></tr></thead>
+                    <tbody>
+                        <tr><td class="font-bold">type: species</td><td class="font-mono">sprites:<br>markingLimits:</td><td class="text-slate-400 italic">Поля полностью вырезаны. Логика перенесена в компоненты сущностей и markingsGroup.</td></tr>
+                        <tr><td class="font-bold">type: species</td><td class="font-mono">maleLastNames:<br>femaleLastNames:</td><td>Объединены в единое поле пула фамилий: <code class="text-white">lastNames:</code></td></tr>
+                        <tr><td class="font-bold">type: species</td><td class="font-mono">dollPrototype: MobHumanDummy</td><td>Используется новый префикс куклы редактора: <code class="text-white">dollPrototype: AppearanceHuman</code></td></tr>
+                        <tr><td class="font-bold">type: marking</td><td class="font-mono">markingCategory:</td><td class="text-slate-400 italic">Удалено. Зона наложения вычисляется автоматически по полю <code>bodyPart</code>.</td></tr>
+                        <tr><td class="font-bold">type: marking</td><td class="font-mono">speciesRestriction: [Human]</td><td>Переведено на систему вайтлистов групп: <code class="text-white">groupWhitelist: [Human]</code></td></tr>
+                    </tbody>
+                </table>
+
+                <h4 id="yaml-organ-ids">Реестр валидных идентификаторов OrganCategoryPrototype</h4>
+                <p class="mb-4 text-slate-300">Строго регламентированный список из 20 идентификаторов для инициализации полей анатомии в словаре <code>organs</code> компонента <code>InitialBody</code>:</p>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono text-[13px] text-center text-[#60a5fa] mb-12">
+                    <div class="bg-[#1f2937] p-2.5 rounded border border-[#374151]">Torso</div>
+                    <div class="bg-[#1f2937] p-2.5 rounded border border-[#374151]">Head</div>
+                    <div class="bg-[#1f2937] p-2.5 rounded border border-[#374151]">ArmLeft</div>
+                    <div class="bg-[#1f2937] p-2.5 rounded border border-[#374151]">ArmRight</div>
+                    <div class="bg-[#1f2937] p-2.5 rounded border border-[#374151]">HandLeft</div>
+                    <div class="bg-[#1f2937] p-2.5 rounded border border-[#374151]">HandRight</div>
+                    <div class="bg-[#1f2937] p-2.5 rounded border border-[#374151]">LegLeft</div>
+                    <div class="bg-[#1f2937] p-2.5 rounded border border-[#374151]">LegRight</div>
+                    <div class="bg-[#1f2937] p-2.5 rounded border border-[#374151]">FootLeft</div>
+                    <div class="bg-[#1f2937] p-2.5 rounded border border-[#374151]">FootRight</div>
+                    <div class="bg-[#1f2937] p-2.5 rounded border border-[#374151]">Brain</div>
+                    <div class="bg-[#1f2937] p-2.5 rounded border border-[#374151]">Eyes</div>
+                    <div class="bg-[#1f2937] p-2.5 rounded border border-[#374151]">Tongue</div>
+                    <div class="bg-[#1f2937] p-2.5 rounded border border-[#374151]">Appendix</div>
+                    <div class="bg-[#1f2937] p-2.5 rounded border border-[#374151]">Ears</div>
+                    <div class="bg-[#1f2937] p-2.5 rounded border border-[#374151]">Lungs</div>
+                    <div class="bg-[#1f2937] p-2.5 rounded border border-[#374151]">Heart</div>
+                    <div class="bg-[#1f2937] p-2.5 rounded border border-[#374151]">Stomach</div>
+                    <div class="bg-[#1f2937] p-2.5 rounded border border-[#374151]">Liver</div>
+                    <div class="bg-[#1f2937] p-2.5 rounded border border-[#374151]">Kidneys</div>
+                </div>
+
+                <h3 id="yaml-comparison" class="text-2xl text-emerald-400 border-b border-emerald-900/50 pb-2">Архитектурное сравнение: Старый прототип vs Новый прототип</h3>
+                <p class="mb-6">
+                    Ниже приведено наглядное сравнение того, как описывалось тело моба и параметры расы <strong>до</strong> рефакторинга, и как они должны быть описаны <strong>теперь</strong>.
+                </p>
+
+                <div class="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-12">
+                    <div class="bg-[#1a1313] border border-rose-900/50 rounded-lg overflow-hidden">
+                        <div class="bg-[#2a1313] px-4 py-2 border-b border-rose-900/50 text-rose-400 font-bold text-[13px] uppercase tracking-wide flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                            СТАРЫЙ ПРОТОТИП (Сломает сервер)
+                        </div>
+                        <div class="p-4">
+                            <p class="text-xs text-slate-400 mb-2 font-mono">1. Конфигурация моба (сложный граф)</p>
+<pre><code class="language-yaml">- type: entity
   id: MobHuman
   components:
   - type: Body
+    prototype: Human # Ссылка на удаленный type: body
+    requiredLegs: 2
+  - type: HumanoidAppearance # Удаленный компонент</code></pre>
+                            
+                            <p class="text-xs text-slate-400 mt-4 mb-2 font-mono">2. Легаси-прототип графа (type: body)</p>
+<pre><code class="language-yaml">- type: body
+  id: Human
+  slots:
+    torso:
+      connections: [ head, left_arm, right_arm ]
+    head:
+      connections: [ eyes, brain ]
+      # Очень длинная иерархия...</code></pre>
+
+                            <p class="text-xs text-slate-400 mt-4 mb-2 font-mono">3. Легаси-прототип расы</p>
+<pre><code class="language-yaml">- type: species
+  id: Human
+  sprites: speciesBaseSpritesHuman # УДАЛЕНО
+  markingLimits: markingPointsHuman # УДАЛЕНО
+  maleLastNames: [ Smith, Doe ] # УДАЛЕНО
+  femaleLastNames: [ Smith, Doe ] # УДАЛЕНО
+  dollPrototype: MobHumanDummy</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="bg-[#131f1a] border border-emerald-900/50 rounded-lg overflow-hidden">
+                        <div class="bg-[#132a20] px-4 py-2 border-b border-emerald-900/50 text-emerald-400 font-bold text-[13px] uppercase tracking-wide flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            НОВЫЙ ПРОТОТИП (NuBody)
+                        </div>
+                        <div class="p-4">
+                            <p class="text-xs text-slate-400 mb-2 font-mono">1. Конфигурация моба (Плоский словарь ECS)</p>
+<pre><code class="language-yaml">- type: entity
+  id: MobHuman
+  components:
+  - type: Body # Оставлен пустым для логики ранений
   - type: InitialBody
     organs:
       Torso: OrganHumanTorso
       Head: OrganHumanHead
       Brain: OrganHumanBrain
-      Eyes: OrganHumanEyes</code></pre>
-
-                <p class="mb-2 text-xs text-slate-400 mt-4">Пример описания новой структуры ограничений маркировок рас (markingsGroup):</p>
-                <pre><code class="language-yaml">- type: markingsGroup
-  id: TestingRequiredEyes
+  - type: HumanoidProfile # Заменил HumanoidAppearance</code></pre>
+                            
+                            <p class="text-xs text-slate-400 mt-4 mb-2 font-mono">2. Иерархия markingsGroup (Новый тип)</p>
+<pre><code class="language-yaml">- type: markingsGroup
+  id: Human
   parent: Undergarments
   limits:
-    enum.HumanoidVisualLayers.Eyes:
+    enum.HumanoidVisualLayers.Hair:
       limit: 1
-      required: true
-      default: [ EyesMarking ]</code></pre>
+    enum.HumanoidVisualLayers.FacialHair:
+      limit: 1</code></pre>
+
+                            <p class="text-xs text-slate-400 mt-4 mb-2 font-mono">3. Обновленный прототип расы</p>
+<pre><code class="language-yaml">- type: species
+  id: Human
+  # Спрайты и лимиты полностью удалены
+  lastNames: [ Smith, Doe ] # Единый массив
+  dollPrototype: AppearanceHuman # Префикс изменен</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <h4 id="yaml-groups" class="mt-10">Карта наследования групп маркировок (markingsGroup Hierarchy)</h4>
+                <p class="mb-4">
+                    Все расы и их форки обязаны мапиться на валидные корневые и дочерние группы маркировок. Корневым системным элементом для всех рас является абстрактная группа <code>Undergarments</code> (нижнее белье).
+                </p>
+<pre><code class="language-plaintext">None (Root System)
+└── Undergarments (Базовая группа скрытия наготы)
+    ├── Human     <-- Целевой маппинг для расы Human
+    ├── Vulpkanin <-- Сюда же принудительно перенаправляется форк CorvaxVulpkanin
+    ├── Arachnid
+    ├── Diona
+    ├── Moth
+    ├── Reptilian
+    ├── Slime
+    ├── Vox
+    └── Skeleton</code></pre>
             </section>
         </main>
 
-        <aside class="w-72 bg-[#171717] border-l border-[#2d2d2d] p-6 fixed right-0 top-14 bottom-0 hidden xl:block overflow-y-auto z-40">
-            <span class="text-xs font-semibold text-[#a6a6a6] uppercase tracking-wider block mb-3">В этой статье</span>
-            <ul class="space-y-2 text-xs text-[#a6a6a6] font-medium border-l border-[#2d2d2d] pl-3">
-                <li><a href="#overview" class="hover:text-white block transition">1. Архитектурный концепт</a></li>
-                <li><a href="#breaking-changes" class="hover:text-white block transition text-rose-400 font-bold">2. Breaking Changes ⚠️</a></li>
-                <li><a href="#initialbody" class="hover:text-white block transition">3. Компоненты (Shared)</a></li>
-                <li><a href="#visualbodysystem" class="hover:text-white block transition">4. Клиентский рендеринг</a></li>
-                <li><a href="#viewmodel" class="hover:text-white block transition">5. Интерфейс и MVVM</a></li>
-                <li><a href="#tests" class="hover:text-white block transition">6. Интеграционные тесты</a></li>
-                <li><a href="#yaml-mapping" class="hover:text-white block transition">7. Спецификация YAML</a></li>
+        <aside class="w-72 bg-[#18181b] border-l border-[#2d2d2d] p-6 fixed right-0 top-14 bottom-0 hidden xl:block overflow-y-auto z-40">
+            <span class="text-[10px] font-bold text-[#9ca3af] uppercase tracking-wider block mb-4 font-mono">Навигация по статье</span>
+            <ul class="space-y-3 text-sm text-[#d1d5db] border-l border-[#333] pl-3 font-mono">
+                <li><a href="#overview" class="hover:text-white block transition-colors">1. Архитектурный концепт</a></li>
+                <li><a href="#breaking-changes" class="text-rose-400 font-bold block transition-colors hover:text-rose-300">2. Breaking Changes ⚠️</a></li>
+                <li><a href="#initialbody" class="hover:text-white block transition-colors">3. Компоненты (Shared)</a></li>
+                <li><a href="#visualbodysystem" class="hover:text-white block transition-colors">4. Клиентские системы</a></li>
+                <li><a href="#viewmodel" class="hover:text-white block transition-colors">5. Интерфейс и MVVM</a></li>
+                <li><a href="#tests" class="hover:text-white block transition-colors">6. Интеграционные тесты</a></li>
+                <li><a href="#yaml-deleted" class="hover:text-white block transition-colors">7. Миграция YAML</a></li>
             </ul>
         </aside>
 
     </div>
+
     <script>hljs.highlightAll();</script>
 </body>
 </html>
